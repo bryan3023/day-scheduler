@@ -14,7 +14,9 @@ let DaySchedulerView = {
       Show today's date on the top of the page. Expects a formatted date string.
      */
     show(formattedDate) {
-      $("#currentDay").text(formattedDate);
+      $(document).ready(() => {
+        $("#currentDay").text(formattedDate);
+      });
     }
   },
 
@@ -43,18 +45,21 @@ let DaySchedulerView = {
      */
     show() {
       this.updateScheduleCallback();
-      $("#timeblock").empty();
 
-      for (let eventItem of this.schedule.events) {
-        let
-          row = $("<div>")
-            .addClass("form-row my-0")
-            .append(this.getLabel(eventItem))
-            .append(this.getInput(eventItem))
-            .append(this.getButton(eventItem));
+      $(document).ready(() => {
+        $("#timeblock").empty();
 
-        $("#timeblock").append(row);
-      }
+        for (let eventItem of this.schedule.events) {
+          let
+            row = $("<div>")
+              .addClass("form-row my-0")
+              .append(this.getLabel(eventItem))
+              .append(this.getInput(eventItem))
+              .append(this.getButton(eventItem));
+
+          $("#timeblock").append(row);
+        }
+      });
     },
 
     setCallbacks(updateScheduleCallback, saveEventCallback) {

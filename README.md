@@ -2,11 +2,7 @@
 
 ## Synopsis
 
-This is a simple app that allows a user to create an hour-by-hour schedule during business hours (9am to 5pm) for the current day.
-
-The schedule for the current day will be saved in local storage, but it will overwritten the next day.
-
-Each event block is color-coded to indicate where an event is relative to the current time.
+This is a simple app that allows a user to create an hour-by-hour schedule during business hours (9am to 5pm) for the current day. The schedule for the current day will be saved in local storage, but it will overwritten the next day. Each event block is color-coded to indicate where an event is relative to the current time.
 
 [Try it here.](https://bryan3023.github.io/gw-homework05/)
 
