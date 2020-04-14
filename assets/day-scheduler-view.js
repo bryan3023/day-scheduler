@@ -1,5 +1,8 @@
 "use strict";
 
+/*
+  Manage the rendering of components on the page.
+ */
 let DaySchedulerView = {
 
   /*
@@ -8,7 +11,7 @@ let DaySchedulerView = {
   currentDayText: {
 
     /*
-
+      Show today's date on the top of the page. Expects a formatted date string.
      */
     show(formattedDate) {
       $("#currentDay").text(formattedDate);
@@ -16,15 +19,28 @@ let DaySchedulerView = {
   },
 
 
+  /*
+    This list of events in the main content area.
+   */
   eventBlocks: {
     schedule: null,
 
+    
+    /*
+      Callback to update the schedule view.
+     */
     updateScheduleCallback: null,
+    
+    
+    /*
+      Callback to save an event to the schedule.
+     */
     saveEventCallback: null,
 
-  //   <div class="form-row my-0">
-  // </div>
 
+    /*
+      Show the schedule of events.
+     */
     show() {
       this.updateScheduleCallback();
       $("#timeblock").empty();
@@ -46,14 +62,18 @@ let DaySchedulerView = {
       this.saveEventCallback = saveEventCallback;
     },
 
+    
+    /*
+      Set the schedule view to newer information.
+     */
     setSchedule(schedule) {
       this.schedule = schedule;
     },
 
-  //   <div class="col my-auto py-auto text-center">
-  //     <label class="col-form-label" for="event-9am">9am</label>
-  //   </div>
 
+    /*
+      Return a label for a specified event.
+     */
     getLabel(eventItem) {
       let
         hourDisplay = eventItem.hourBlockDisplay,
@@ -68,20 +88,20 @@ let DaySchedulerView = {
     },
 
 
-  //   <div class="col-10 mr-0 pr-0 my-0">
-  //     <textarea class="form-control bg-success" id="exampleFormControlTextarea1" rows="3"></textarea>
-  //   </div>
-
+    /*
+      Return a text input area for a specified event.
+     */
     getInput(eventItem) {
       let
         hourDisplay = eventItem.hourBlockDisplay,
-        colorTheme = this.colorTheme[eventItem.relativeTime],
+        bgTheme = this.bgTheme[eventItem.relativeTime],
+        fontTheme = this.fontTheme[eventItem.relativeTime],
 
         div = $("<div>").addClass("col-10 mr-0 pr-0 my-0"),
         textarea = $("<textarea>")
-          .addClass(`form-control bg-${colorTheme}`)
+          .addClass(`form-control bg-${bgTheme} text-${fontTheme}`)
           .attr("id", `input-${hourDisplay}`)
-          .attr("name", eventItem.hourBlock)
+          .attr("data-value", eventItem.hourBlock)
           .attr("rows", 3)
           .text(eventItem.event);
 
@@ -89,18 +109,17 @@ let DaySchedulerView = {
     },
 
 
-  //   <div class="col ml-0 pl-0 py-auto my-0">
-  //     <button class="btn btn-outline-success h-100" type="submit">Save</button>
-  //   </div>
-
+    /*
+      Return a save button for a specified event.
+     */
     getButton(eventItem) {
       let
         hourDisplay = eventItem.hourBlockDisplay,
-        colorTheme = this.colorTheme[eventItem.relativeTime],
+        bgTheme = this.bgTheme[eventItem.relativeTime],
 
         div = $("<div>").addClass("col ml-0 pl-0 py-auto my-0"),
         button = $("<button>")
-          .addClass(`btn btn-outline-${colorTheme} h-100`)
+          .addClass(`btn btn-outline-${bgTheme} h-100`)
           .attr("id", `submit-${hourDisplay}`)
           .attr("type", "submit")
           .text("Save")
@@ -109,24 +128,34 @@ let DaySchedulerView = {
 
             let
               textID = '#' + event.target.id.replace("submit", "input"),
-              textValue = $(textID).val(),
-              textName = parseInt($(textID).attr("name"));
+              eventText = $(textID).val(),
+              eventHour = parseInt($(textID).attr("data-value"));
 
-            alert(textName)
-
-            this.saveEventCallback(textName, textValue);
-            this.show();
-              
+            this.saveEventCallback(eventHour, eventText);
+            this.show();              
           });
 
       return div.append(button);
     },
 
 
-    colorTheme: {
+    /*
+      Lookup table to match background color with relative time.
+     */
+    bgTheme: {
       before: "secondary",
       now: "danger",
       after: "success"
-    }
+    },
+
+
+    /*
+      Lookup table to match font color with relative time.
+     */
+    fontTheme: {
+      before: "light",
+      now: "light",
+      after: "light"
+    },
   }
 } 

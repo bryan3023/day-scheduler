@@ -1,5 +1,8 @@
 "use strict";
 
+/*
+  Manage the internal state of the scheduler.
+ */
 let DaySchedulerModel = {
 
   /*
@@ -19,10 +22,18 @@ let DaySchedulerModel = {
    */
   schedule: null,
 
+  
+  /*
+    Initialize the model.
+   */
   start() {
     this.loadTodaysSchedule();
   },
 
+  
+  /*
+    Get today's date, formatted for the page.
+   */
   getTodayText() {
     return moment().format("dddd, MMMM Do");
   },
@@ -41,18 +52,25 @@ let DaySchedulerModel = {
       if (this.hasTodaysSchedule(savedSchedule)) {
         this.schedule = savedSchedule;
       }
-    } else {
+    }
+    
+    if (!this.schedule) {
         this.schedule = this.newSchedule();
         this.saveTodaysSchedule(this.schedule);
     }
   },
 
+  
+  /*
+    Save the current schedule to local storage.
+   */
   saveTodaysSchedule() {
     localStorage.setItem("SavedSchedule", JSON.stringify(this.schedule));
   },
 
 
   /*
+    Return a new schedule for creating events during business hours today.
    */
   newSchedule() {
     const
@@ -90,7 +108,9 @@ let DaySchedulerModel = {
   },
 
 
-
+  /*
+    Return the current schedule with added relative time context.
+   */
   getSchedule() {
     this.setRelativeTime();
     return this.schedule;
@@ -107,15 +127,15 @@ let DaySchedulerModel = {
         eventMoment = moment({hour: event.hourBlock}),
         now = moment();
 
-      if (eventMoment.isBefore(now)) {
+      if (eventMoment.isBefore(now, "hour")) {
         event.relativeTime = "before";
       }
 
-      if (eventMoment.isSame(now)) {
+      if (eventMoment.isSame(now, "hour")) {
         event.relativeTime = "now";
       }
 
-      if (eventMoment.isAfter(now)) {
+      if (eventMoment.isAfter(now, "hour")) {
         event.relativeTime = "after";
       }
     }
@@ -126,12 +146,9 @@ let DaySchedulerModel = {
     Add a new event to the specified hour block and save changes.
    */
   setEvent(hourBlock, event) {
-    alert(hourBlock + " " + event);
     this.schedule.events
       .filter(e => e.hourBlock === hourBlock)
       .forEach(e => e.event = event);
-
-//    hourblock.event = event;
 
     this.saveTodaysSchedule();
   }

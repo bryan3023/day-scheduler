@@ -1,5 +1,8 @@
 "use strict";
 
+/*
+  Initialize the scheduler and respond to events.
+ */
 let DaySchedulerController = {
 
   model: null,
@@ -24,10 +27,18 @@ let DaySchedulerController = {
     this.view.eventBlocks.show();
   },
 
+
+  /*
+    Update the view with the current schuduled events.
+   */
   updateSchedule() {
     this.view.eventBlocks.setSchedule(this.model.getSchedule());
   },
 
+
+  /*
+    Add an event to the schedule.
+   */
   addEvent(hourBlock, event) {
     this.model.setEvent(hourBlock, event);
   }
